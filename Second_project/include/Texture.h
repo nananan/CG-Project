@@ -15,20 +15,13 @@ using namespace std;
 class MyTexture
 {
 public:
-    MyTexture(const char* _path)
-    {
-//        id=instanceID;
-//        instanceID++;
-
+    MyTexture(const char* _path) {
         path =(char*)_path;
         glGenTextures(1, &texture);
         loadImage();
     }
 
-
-
-    void setParameters (int _wrapSParameter, int _wrapTParameter, int _minFilter, int _magFilter)
-    {
+    void setParameters (int _wrapSParameter, int _wrapTParameter, int _minFilter, int _magFilter) {
         wrapSParameter = _wrapSParameter;
         wrapTParameter = _wrapTParameter;
         minFilter = _minFilter;
@@ -64,14 +57,12 @@ public:
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    GLuint& getTexture()
-    {
+    GLuint& getTexture() {
         return texture;
     }
 
 
 private:
-//    static unsigned int instanceID;
     GLuint texture;
     int wrapSParameter;
     int wrapTParameter;
@@ -100,6 +91,4 @@ private:
 
 };
 
-
-//unsigned int MyTexture :: instanceID=0;
 #endif

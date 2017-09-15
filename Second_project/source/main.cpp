@@ -60,7 +60,7 @@ int main() {
     // Setup some OpenGL options
     glEnable(GL_DEPTH_TEST);
 
-    GLfloat floorCoordinates[]={
+    GLfloat floorCoordinates[] = {
         //Coordiantes           //normals              //texture
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
          0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  30.0f,
@@ -70,20 +70,18 @@ int main() {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f
     };
 
-    Shader* floor_shader = new Shader("/home/eliana/MEGA/Qt/Second_project/shaders/floor.vs", "/home/eliana/MEGA/Qt/Second_project/shaders/floor.frag");
-    Shader* sphere_shader = new Shader("/home/eliana/MEGA/Qt/Second_project/shaders/sphere.vs", "/home/eliana/MEGA/Qt/Second_project/shaders/sphere.frag");
-    Shader* cube_shader = new Shader("/home/eliana/MEGA/Qt/Second_project/shaders/cube.vs", "/home/eliana/MEGA/Qt/Second_project/shaders/cube.frag");
-    char pathSphere[] = "/home/eliana/MEGA/Qt/Second_project/model/sphere2.obj";
-    char pathCube[] = "/home/eliana/MEGA/Qt/Second_project/model/cube.obj";
+    Shader* floor_shader = new Shader("../shaders/floor.vs", "../shaders/floor.frag");
+    Shader* sphere_shader = new Shader("../shaders/sphere.vs", "../shaders/sphere.frag");
+    Shader* cube_shader = new Shader("../shaders/cube.vs", "../shaders/cube.frag");
+    char pathSphere[] = "../model/sphere2.obj";
+    char pathCube[] = "../model/cube.obj";
     Model sphereModel(pathSphere);
     Model cubeModel(pathCube);
 
     Floor* floor = new Floor();
     floor->setVAO_VBO(floorCoordinates, sizeof(floorCoordinates));
-    MyTexture texture("/home/eliana/MEGA/Qt/Second_project/textures/floor2.jpg");
+    MyTexture texture("../textures/floor.jpg");
     texture.setParameters(GL_REPEAT, GL_REPEAT,GL_NEAREST, GL_NEAREST);
-//    texture.loadTexture("/home/eliana/MEGA/Qt/Second_project/textures/floor2.jpg");
-//    floor->setTexParameter(GL_REPEAT, GL_REPEAT, GL_LINEAR, GL_LINEAR);
 
     Object* cube = new Object();
     Object* sphere = new Object();
@@ -101,8 +99,7 @@ int main() {
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
-    while(!glfwWindowShouldClose(window))
-    {
+    while(!glfwWindowShouldClose(window)) {
         // Set frame time
         GLfloat currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -116,22 +113,18 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 view = camera.GetViewMatrix();
-//        view = glm::rotate(view,  glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glm::mat4 projection = glm::perspective(camera.Zoom, (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
 
         floor_shader->Use();
-//        glUniform1f(glGetUniformLocation(floor_shader->Program, "tex"), true);
 
         floor->setUniform(floor_shader, camera, view, projection);
         floor->setUniformLight(floor_shader, 0.7f, lightpos, lightdir);
         floor->setUniformMaterial(floor_shader);
 
         //floor construsction
-//        floor->bindTexture();
         texture.bindTexture(floor_shader);
         glBindVertexArray(floor->getVAO());
         floor->setModel(floor_shader, glm::vec3(0.0f, -5.3f, 0.0f), 10.0f);
-//        floor->unbindTexture();
         texture.unbindTexture();
         glBindVertexArray(0);
 
@@ -147,13 +140,11 @@ int main() {
         sphere->setUniformLight(sphere_shader, 0.3f, lightpos, lightdir);
         sphere->setUniformMaterial(sphere_shader, glm::vec3(), false, true);
 
-//        glUniform1f(glGetUniformLocation(shader.Program, "tex"), false);
-        for(int i = 1; i <= 4; i++){
+        for(int i = 1; i <= 4; i++) {
             sphere->setUniformMaterial(sphere_shader, color[i-1], true, false);
             sphere->setModel(sphere_shader, position[i], 0.3f);
             sphereModel.Draw(sphere_shader);
         }
-
 
         glfwSwapBuffers(window);
     }
@@ -174,9 +165,8 @@ int main() {
 
 
 
-// Moves/alters the camera positions based on user input
-void Do_Movement()
-{
+// Moves the camera positions based on user input
+void Do_Movement() {
     if(keys[GLFW_KEY_W]){
         camera.ProcessKeyboard(FORWARD, deltaTime);
         bool collision = false;
@@ -197,7 +187,7 @@ void Do_Movement()
                 break;
             }
         if(collision)
-         camera.ProcessKeyboard(FORWARD, deltaTime);
+            camera.ProcessKeyboard(FORWARD, deltaTime);
     }
     if(keys[GLFW_KEY_A]){
         camera.ProcessKeyboard(LEFT, deltaTime);
@@ -219,11 +209,11 @@ void Do_Movement()
                 break;
             }
         if(collision)
-         camera.ProcessKeyboard(LEFT, deltaTime);
+            camera.ProcessKeyboard(LEFT, deltaTime);
     }
 }
 
-// Is called whenever a key is pressed/released via GLFW
+//Called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
     //cout << key << endl;
