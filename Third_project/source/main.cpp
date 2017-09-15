@@ -21,6 +21,7 @@ void setPoint(float p[3], float x, float y, float z);
 
 //camera
 Camera camera(glm::vec3(-9.4467f, -1401.47f, 2811.29f));
+// Camera camera(glm::vec3(2947.86f, -1780.32f, -427.001f));
 bool keys[1024];
 GLfloat lastX = 400, lastY = 300;
 bool firstMouse = true;
@@ -33,7 +34,7 @@ GLuint* indicesEBO = 0;
 int sizeVBO = 0;
 
 float angleX = 100.8f;
-float angleY = -10.6f;
+float angleY = -16.6f;
 float angleZ = 0.0f;
 
 float transX = 0.0f;
@@ -77,11 +78,11 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
 
-    Reader* reader_altitude = new Reader("/home/eliana/MEGA/Qt/Third_project/dataset_lava/altitudes.dat");
+    Reader* reader_altitude = new Reader("../dataset_lava/altitudes.dat");
     reader_altitude->loadData(false);
-    Reader* reader_temperature = new Reader("/home/eliana/MEGA/Qt/Third_project/dataset_lava/temperature.dat");
+    Reader* reader_temperature = new Reader("../dataset_lava/temperature.dat");
     reader_temperature->loadData(true);
-    Reader* reader_lava = new Reader("/home/eliana/MEGA/Qt/Third_project/dataset_lava/lava.dat");
+    Reader* reader_lava = new Reader("../dataset_lava/lava.dat");
     reader_lava->loadData(true);
 
     float max = reader_temperature->getMatrix()[0][0];
@@ -111,11 +112,11 @@ int main()
         }
     }
 
-    MyTexture texture("/home/eliana/MEGA/Qt/Third_project/textures/texture.png");
+    MyTexture texture("../textures/texture.png");
     texture.setParameters(GL_REPEAT, GL_REPEAT,GL_NEAREST, GL_NEAREST);
 
-    Shader* volcano_shader = new Shader("/home/eliana/MEGA/Qt/Third_project/shaders/volcano.vs", "/home/eliana/MEGA/Qt/Third_project/shaders/volcano.frag");
-    Shader* light_shader = new Shader("/home/eliana/MEGA/Qt/Third_project/shaders/light.vs", "/home/eliana/MEGA/Qt/Third_project/shaders/light.frag");
+    Shader* volcano_shader = new Shader("../shaders/volcano.vs", "../shaders/volcano.frag");
+    Shader* light_shader = new Shader("../shaders/light.vs", "../shaders/light.frag");
 
     altitudes->fillVertexMatrix(reader_altitude->getMatrix(), nrows, ncols, reader_altitude->getValues()["NODATA_value"]);
     delete reader_altitude;
@@ -130,7 +131,7 @@ int main()
     for (int i = 0; i < nrows+1; i++) {
         for (int j = 0; j < ncols+1; j++) {
             float valueZ = altitudes->getValueMatrix(i,j);
-            vert.push_back(make_tuple(j*distance, i*distance, valueZ));
+            vert.push_back(make_tuple(j*distance, i*distance, valueZ)); //if change i and j, remove comment in camera's property
 
             if (ind == 3)
                 index_norm++;
@@ -144,7 +145,7 @@ int main()
 
             vert.push_back(make_tuple(temperature, x, 0.0f));
 
-            float r = 1-(float)i/nrows;
+            float r = (float)i/nrows; //add "1-" se vuoi come prof
             float s = (float)j/ncols;
 
             vert_tex.push_back(make_tuple(s,r));
@@ -204,6 +205,11 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = glm::perspective(camera.Zoom, (float)WIDTH/(float)HEIGHT, 0.1f, 10000.0f);
 
+// //         cout<<"POS: "<<camera.Position.x<<" "<<camera.Position.y<<" "<<camera.Position.z<<endl;
+// //         cout<<camera.Yaw<<" "<<camera.Pitch<<endl;
+//         
+// //         cout<<angleY<<endl;
+        
         volcano_shader->Use();
 
         glUniform1i(glGetUniformLocation(volcano_shader->Program, "material.diffuse"),  0);
