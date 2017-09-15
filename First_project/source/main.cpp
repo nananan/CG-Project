@@ -69,10 +69,10 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
 
-    Shader particle_shader("/home/eliana/MEGA/Qt/First_project/shaders/particle.vs", "/home/eliana/MEGA/Qt/First_project/shaders/particle.frag");
+    Shader particle_shader("../shaders/particle.vs", "../shaders/particle.frag");
 
-    char pathSphere[] = "/home/eliana/MEGA/Qt/First_project/model/sphere/sphere.obj";
-    char pathTourch[] = "/home/eliana/MEGA/Qt/First_project/model/bulb/lamp.obj";
+    char pathSphere[] = "../model/sphere/sphere.obj";
+    char pathTourch[] = "../model/bulb/lamp.obj";
     Model modelSphere(pathSphere);
     Model modelTourch(pathTourch);
 
@@ -90,7 +90,7 @@ int main() {
     cube->setVAO_VBO();
     glBindVertexArray(0); // Unbind VAO
 
-    Shader lampShader("/home/eliana/MEGA/Qt/First_project/shaders/lamp.vs", "/home/eliana/MEGA/Qt/First_project/shaders/lamp.frag");
+    Shader lampShader("../shaders/lamp.vs", "../shaders/lamp.frag");
 
     glEnable(GL_DEPTH_TEST);
 
