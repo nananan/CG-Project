@@ -2,9 +2,7 @@
 #include "../include/SmallCube.h"
 
 SmallCube::SmallCube() {
-//    rotate = 55.0f;
 
-    //vertices = new GLfloat[26];
     GLfloat vert []=  {
                 -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
                  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
@@ -73,7 +71,7 @@ void SmallCube::setVAO_VBO() {
 void SmallCube::show(GLuint WIDTH, GLuint HEIGHT, GLfloat dimension, glm::mat4 projection, glm::mat4 view, glm::vec3 lightPos, glm::vec3 cameraPos){
     glUniform3f(glGetUniformLocation(shader->Program, "objectColor"), 0.60f, 0.60f, 0.0f);
 
-//---    // Create transformations
+    // Create transformations
     glm::mat4 model;
 
 //    model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -89,13 +87,6 @@ void SmallCube::show(GLuint WIDTH, GLuint HEIGHT, GLfloat dimension, glm::mat4 p
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 }
-
-//void SmallCube::updateRotate(float updateRotate, bool add) {
-//    if (add)
-//        rotate += updateRotate;
-//    else
-//        rotate -= updateRotate;
-//}
 
 void SmallCube::setVertices(GLfloat vertices[]) {
     for (int i = 0; i < Property::VERTICES_SIZE; i++) {

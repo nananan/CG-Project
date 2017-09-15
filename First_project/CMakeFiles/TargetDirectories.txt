@@ -1,3 +1,0 @@
-/home/eliana/MEGA/Qt/First_project/CMakeFiles/edit_cache.dir
-/home/eliana/MEGA/Qt/First_project/CMakeFiles/rebuild_cache.dir
-/home/eliana/MEGA/Qt/First_project/CMakeFiles/First_Project.dir

@@ -2,7 +2,6 @@
 #include "../include/WiderCube.h"
 
 WiderCube::WiderCube() {
-//    rotate = 55.0f;
 
     GLfloat vert []=  {
 

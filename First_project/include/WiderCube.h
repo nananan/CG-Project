@@ -14,9 +14,6 @@ class WiderCube: public Object
 
         void setVAO_VBO();
         void show(GLuint WIDTH, GLuint HEIGHT, GLuint dimension, glm::mat4 projection, glm::mat4 view);
-
-//        void updateRotate(float updateRotate, bool add);
-
 };
 
 

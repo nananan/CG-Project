@@ -1,9 +1,7 @@
 #include "../include/Include.h"
 #include "../include/Object.h"
 
-Object::Object() {
-    rotate = 55.0f;
-}
+Object::Object() {}
 
 GLuint Object::getVAO() {
     return VAO;
@@ -49,14 +47,4 @@ void Object::setLightingShader(Shader* shader, glm::vec3 lightPos, glm::vec3 cam
     glUniformMatrix4fv(glGetUniformLocation(shader->Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     glUniformMatrix4fv(glGetUniformLocation(shader->Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-    // world transformation
-//    glm::mat4 model  = glm::mat4();
-//    glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-}
-
-void Object::updateRotate(float updateRotate, bool add) {
-    if (add)
-        this->rotate += updateRotate;
-    else
-        this->rotate -= updateRotate;
 }

@@ -1,16 +1,12 @@
 #include "../include/Include.h"
 #include "../include/Model.h"
 #include <SOIL/SOIL.h>
-#include "../include/stb_image.h"
 
 #include <iostream>
 // Window dimensions
 const GLuint WIDTH = 1200, HEIGHT = 720;
 
 // camera
-//glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f,  5.0f);
-//glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-//glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f,  0.0f);
 Camera camera(glm::vec3(2.07124f, 0.0281185f, 2.51323f));
 glm::vec3 lightPos(0.0f, 0.0f, 1.5f);
 glm::vec3 target(0.0f, 0.0f, 5.0f);
@@ -34,11 +30,16 @@ float rotX = 0.0f;
 float rotY = 0.0f;
 
 #define MOV_LIGHT 0.01f;
-#define NUM_PARTICLES 1000;
+#define NUM_PARTICLES 2000;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
+WiderCube* widerCube;
+SmallCube* cube;
+
+vector <Particle*> particles;
 
 int main() {
 
@@ -75,14 +76,12 @@ int main() {
     Model modelSphere(pathSphere);
     Model modelTourch(pathTourch);
 
-    WiderCube* widerCube = new WiderCube();
-    SmallCube* cube = new SmallCube();
-//    SmallCube* cubeLight = new SmallCube();
+    widerCube = new WiderCube();
+    cube = new SmallCube();
 
-    vector <Particle*> particles;
+//    vector <Particle*> particles;
     for (int i = 0; i < NUM_PARTICLES i++) {
       Particle* particle = new Particle();
-//      particle->setVAO_VBO(particles.size());
       particles.push_back(particle);
     }
 
@@ -90,12 +89,8 @@ int main() {
     glBindVertexArray(0); // Unbind VAO
     cube->setVAO_VBO();
     glBindVertexArray(0); // Unbind VAO
-//    cubeLight->setVAO_VBO();
-//    glBindVertexArray(0); // Unbind VAO
 
-//    Shader* lightingShader = new Shader("/home/eliana/MEGA/Qt/First_project/shaders/color.vs", "/home/eliana/MEGA/Qt/First_project/shaders/color.frag");
     Shader lampShader("/home/eliana/MEGA/Qt/First_project/shaders/lamp.vs", "/home/eliana/MEGA/Qt/First_project/shaders/lamp.frag");
-
 
     glEnable(GL_DEPTH_TEST);
 
@@ -136,7 +131,6 @@ int main() {
         glDrawArrays(GL_LINES, 0, 24);
         glBindVertexArray(0);
 
-//         glBindVertexArray(0);
         cube->getShader()->Use();
         cube->show(WIDTH, HEIGHT, (Property::dimension/3.0f), projection, view, lightPos, camera.Position);
 
@@ -152,25 +146,17 @@ int main() {
         lampShader.Use();
         glUniformMatrix4fv(glGetUniformLocation(lampShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(glGetUniformLocation(lampShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-//        glBindVertexArray(0);
 
         glm::mat4 model;
         model = glm::translate(model, lightPos);
         model = glm::rotate(model, glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f));
         model = glm::rotate(model, glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f));
-//        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(0.05f)); // a smaller cube
         glUniformMatrix4fv(glGetUniformLocation(lampShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         modelTourch.Draw(lampShader);
 
-//        glBindVertexArray(lightVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
-
-
-//        cout<<camera.Position.x<<" "<<camera.Position.y<<" "<<camera.Position.z<<endl;
-//        cout<<"YAW: "<<camera.Yaw<<" "<<camera.Pitch<<endl;
-
 
         // DRAW PARTICLES
         particle_shader.Use();
@@ -179,30 +165,29 @@ int main() {
         glUniform1f(glGetUniformLocation(particle_shader.Program, "light.cutOff"), glm::cos(glm::radians(25.5f)));
         glUniform1f(glGetUniformLocation(particle_shader.Program, "light.outerCutOff"), glm::cos(glm::radians(30.5f)));
 
-       // light properties
-       glUniform3f(glGetUniformLocation(particle_shader.Program, "light.ambient"), 0.5f, 0.5f, 0.5f);
-       // we configure the diffuse intensity slightly higher; the right lighting conditions differ with each lighting method and environment.
-       // each environment and lighting type requires some tweaking to get the best out of your environment.
-       glUniform3f(glGetUniformLocation(particle_shader.Program, "light.diffuse"), 0.8f, 0.8f, 0.8f);
-       glUniform3f(glGetUniformLocation(particle_shader.Program, "light.specular"), 0.1f, 0.1f, 0.1f);
+        // light properties
+        glUniform3f(glGetUniformLocation(particle_shader.Program, "light.ambient"), 0.5f, 0.5f, 0.5f);
+        // we configure the diffuse intensity slightly higher; the right lighting conditions differ with each lighting method and environment.
+        // each environment and lighting type requires some tweaking to get the best out of your environment.
+        glUniform3f(glGetUniformLocation(particle_shader.Program, "light.diffuse"), 0.8f, 0.8f, 0.8f);
+        glUniform3f(glGetUniformLocation(particle_shader.Program, "light.specular"), 0.1f, 0.1f, 0.1f);
 
-       glUniform1f(glGetUniformLocation(particle_shader.Program, "light.constant"), 1.0f);
-       glUniform1f(glGetUniformLocation(particle_shader.Program, "light.linear"), 0.09f);
-       glUniform1f(glGetUniformLocation(particle_shader.Program, "light.quadratic"), 0.032f);
+        glUniform1f(glGetUniformLocation(particle_shader.Program, "light.constant"), 1.0f);
+        glUniform1f(glGetUniformLocation(particle_shader.Program, "light.linear"), 0.09f);
+        glUniform1f(glGetUniformLocation(particle_shader.Program, "light.quadratic"), 0.032f);
 
-       // material properties
-       glUniform1f(glGetUniformLocation(particle_shader.Program, "material.shininess"), 64.0f);
+        // material properties
+        glUniform1f(glGetUniformLocation(particle_shader.Program, "material.shininess"), 64.0f);
 
-       glUniform3f(glGetUniformLocation(particle_shader.Program, "light.position"), lightPos.x, lightPos.y, lightPos.z);
-       glUniform3f(glGetUniformLocation(particle_shader.Program, "light.direction"), -lightPos.x, -lightPos.y, -lightPos.z);
-       glUniform3f(glGetUniformLocation(particle_shader.Program, "viewPos"), camera.Position.x, camera.Position.y, camera.Position.z);
+        glUniform3f(glGetUniformLocation(particle_shader.Program, "light.position"), lightPos.x, lightPos.y, lightPos.z);
+        glUniform3f(glGetUniformLocation(particle_shader.Program, "light.direction"), -lightPos.x, -lightPos.y, -lightPos.z);
+        glUniform3f(glGetUniformLocation(particle_shader.Program, "viewPos"), camera.Position.x, camera.Position.y, camera.Position.z);
 
-       glUniformMatrix4fv(glGetUniformLocation(particle_shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-       glUniformMatrix4fv(glGetUniformLocation(particle_shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(particle_shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(glGetUniformLocation(particle_shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-       for(int i=0;i<NUM_PARTICLES i++){
+        for(int i=0;i<NUM_PARTICLES i++){
            glm::mat4 spheres;
-//           spheres = glm::rotate(spheres, glm::radians(55.0f), glm::vec3(0.0f, 1.0f, 0.0f));
            spheres = glm::translate(spheres, particles[i]->getPosition());
            spheres = glm::scale(spheres, glm::vec3(0.01f, 0.01f, 0.01f));
            glUniformMatrix4fv(glGetUniformLocation(particle_shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(spheres));
@@ -278,16 +263,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             lightPos.x += MOV_LIGHT;
             target.x += MOV_LIGHT;
 
-            rotY += 0.2f;
+            rotY += 0.4f;
         }
-
     }
     if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
-        if (rotY >= -55.0) {
+        if (rotY >= -43.0) {
             lightPos.x -= MOV_LIGHT;
             target.x -= MOV_LIGHT;
 
-            rotY -= 0.2f;
+            rotY -= 0.4f;
         }
     }
     if(glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS){
@@ -307,8 +291,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             pressStart = true;
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     if(firstMouse)
     {
         lastX = xpos;
@@ -326,8 +309,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 }
 
 
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.ProcessMouseScroll(yoffset);
 }
 

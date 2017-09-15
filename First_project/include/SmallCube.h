@@ -16,9 +16,6 @@ class SmallCube: public Object
 
         void setVAO_VBO();
         void show(GLuint WIDTH, GLuint HEIGHT, GLfloat dimension, glm::mat4 projection, glm::mat4 view, glm::vec3 lightPos, glm::vec3 cameraPos);
-
-//        void updateRotate(float updateRotate, bool add);
-
 };
 
 

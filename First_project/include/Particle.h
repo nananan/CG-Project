@@ -12,7 +12,6 @@ class Particle
         float x;
         float y;
         float z;
-        float rotate;
         GLuint VAO, VBO;
         float range = (DIMENSION) - 0.05f;
 
@@ -27,10 +26,6 @@ class Particle
         GLuint getVAO();
         void deleteVAO_VBO();
         void setVAO_VBO(int size);
-
-        void updateRotate(float updateRotate, bool add);
-
-        void show(Shader shader, glm::mat4 view, glm::mat4 projection, glm::vec3 lightPos, glm::vec3 cameraPos);
 };
 
 #endif

@@ -1,9 +1,6 @@
 #include "../include/Particle.h"
 
-Particle::Particle()
-{
-    this->rotate = 55.f;
-
+Particle::Particle() {
     this->x = randomPosition(-range,range)/3;
     this->y = randomPosition(-range,range)/3;
     this->z = randomPosition(-range,range)/3;
@@ -42,29 +39,7 @@ void Particle::update(int i) {
     else if (this->z <= -limit)
         this->z += move[2]*-1;
 
- }
-
-void Particle::show(Shader shader, glm::mat4 view, glm::mat4 projection, glm::vec3 lightPos, glm::vec3 cameraPos) {
-//    glUniform3f( glGetUniformLocation( shader.Program, "uColor" ), 1.0, 1.0, 1.0 );
-
-    glUniform3f(glGetUniformLocation(shader.Program, "objectColor"),  1.0f, 0.5f, 0.31f);
-    glUniform3f(glGetUniformLocation(shader.Program, "lightColor"),  1.0f, 1.0f, 1.0f);
-
-    glUniform3f(glGetUniformLocation(shader.Program, "lightPos"),  lightPos.x, lightPos.y, lightPos.z);
-    glUniform3f(glGetUniformLocation(shader.Program, "viewPos"),  cameraPos.x, cameraPos.y, cameraPos.z);
-
-    glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-
-    // world transformation
-    glm::mat4 model;
-//    model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 1.0f, 0.0f));
-//    model = glm::scale(model, glm::vec3(0.005f, 0.005f, 0.005f));
-    model = glm::translate(model, glm::vec3(x,y,z));
-//    model = glm::rotate(model, glm::radians(rotate), glm::vec3(1.0f, 0.0f, 0.0f));
-    glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 }
-
 
 void Particle::setVAO_VBO(int size) {
 
@@ -96,11 +71,5 @@ void Particle::deleteVAO_VBO() {
     glDeleteBuffers(1, &VBO);
 }
 
-void Particle::updateRotate(float updateRotate, bool add) {
-    if (add)
-        rotate += updateRotate;
-    else
-        rotate -= updateRotate;
-}
 
 
