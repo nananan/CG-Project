@@ -19,10 +19,15 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const GLfloat YAW        = 663.88f;
-const GLfloat PITCH      = -43.855f;
-// const GLfloat YAW        = 497.212f;
-// const GLfloat PITCH      = -30.381f;
+//---- for view near lava
+// const GLfloat YAW        = 326.177f;
+// const GLfloat PITCH      = 6.22823f;
+//first two fron to lava
+const GLfloat YAW        = 402.396f;
+const GLfloat PITCH      = -43.0668f;
+//---- in the surface, front of lava
+// const GLfloat YAW        = 336.196f;
+// const GLfloat PITCH      = -6.76645f;
 const GLfloat SPEED      =  1000.0f;
 const GLfloat SENSITIVTY =  0.25f;
 const GLfloat ZOOM       =  45.0f;

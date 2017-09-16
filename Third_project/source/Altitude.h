@@ -34,10 +34,10 @@ public:
 
     void fillVertexMatrix(float** coordinates, int rows, int cols, int novalue) {
           for (int i = 0; i < rows+1; ++i) {
-            for (int j = 0; j < cols+1; j++) {
                 float h1, h2, h3, h4;
+            for (int j = 0; j < cols+1; j++) {
                 if (i == 0 && j == 0) {
-                        matrixVertex[i][j] = checkNoValue(coordinates, i ,j, novalue);
+                    matrixVertex[i][j] = checkNoValue(coordinates, i ,j, novalue);
                 }
                 else if (i == 0) {
                     if (j <= cols-1) {

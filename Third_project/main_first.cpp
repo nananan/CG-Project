@@ -20,12 +20,8 @@ glm::vec3 get_face_normal (float p1[3], float p2[3], float p3[3]);
 void setPoint(float p[3], float x, float y, float z);
 
 //camera
-//for view near lava
-// Camera camera(glm::vec3(-4576.68f, 2267.16f, 3357.31f));
-//first: front of lava1
-Camera camera(glm::vec3(-3055.73f, 4643.06f, 415.618f));
-// in the surface, front of lava
-// Camera camera(glm::vec3(-3046.46f, 3650.31f, 2681.76f));
+Camera camera(glm::vec3(-9.4467f, -1401.47f, 2811.29f));
+// Camera camera(glm::vec3(2947.86f, -1780.32f, -427.001f));
 bool keys[1024];
 GLfloat lastX = 400, lastY = 300;
 bool firstMouse = true;
@@ -37,36 +33,12 @@ int sizeEBO = 0;
 GLuint* indicesEBO = 0;
 int sizeVBO = 0;
 
-// POS: -3046.46 3650.31 2681.76
-// 336.196 -6.76645
-// 178.2 102.8
-// 0 1480 0
-
-
-//in comment, parameters for view front of lava
-float angleX = 102.8f;
-float angleY = 178.2f;
+float angleX = 100.8f;
+float angleY = -16.6f;
 float angleZ = 0.0f;
 
 float transX = 0.0f;
-float transY = 1480.0f;
-//---- for view near lava
-// float angleX = 102.8f;
-// float angleY = 202.6f;
-// float angleZ = 0.0f;
-// 
-// float transX = 280.0f;
-// float transY = 1440.0f;
-
-//---- in the surface, front of lava
-// float angleX = 102.8f;
-// float angleY = 178.2f;
-// float angleZ = 0.0f;
-// 
-// float transX = 0.0f;
-// float transY = 1480.0f;
-
-
+float transY = 0.0f;
 float transZ = 0.0f;
 float changeTranslation = 1.0f;
 
@@ -159,7 +131,7 @@ int main()
     for (int i = 0; i < nrows+1; i++) {
         for (int j = 0; j < ncols+1; j++) {
             float valueZ = altitudes->getValueMatrix(i,j);
-            vert.push_back(make_tuple(i*distance, j*distance, valueZ)); //if change i and j, remove comment in camera's property
+            vert.push_back(make_tuple(j*distance, i*distance, valueZ)); //if change i and j, remove comment in camera's property
 
             if (ind == 3)
                 index_norm++;
@@ -233,11 +205,10 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = glm::perspective(camera.Zoom, (float)WIDTH/(float)HEIGHT, 0.1f, 10000.0f);
 
-        cout<<"POS: "<<camera.Position.x<<" "<<camera.Position.y<<" "<<camera.Position.z<<endl;
-        cout<<camera.Yaw<<" "<<camera.Pitch<<endl;
+// //         cout<<"POS: "<<camera.Position.x<<" "<<camera.Position.y<<" "<<camera.Position.z<<endl;
+// //         cout<<camera.Yaw<<" "<<camera.Pitch<<endl;
 //         
-        cout<<angleY<<" "<<angleX<<endl;
-        cout<<transX<<" "<<transY<<" "<<transZ<<endl;
+// //         cout<<angleY<<endl;
         
         volcano_shader->Use();
 
@@ -249,7 +220,7 @@ int main()
 //        glUniform3f(glGetUniformLocation(volcano_shader->Program, "viewPos"), camera.Position.x, camera.Position.y, camera.Position.z);
         glUniform3f(glGetUniformLocation(volcano_shader->Program, "light.ambient"),   0.7f, 0.7f, 0.7f);
         glUniform3f(glGetUniformLocation(volcano_shader->Program, "light.diffuse"),   0.9f, 0.9f, 0.9f);
-//         glUniform3f(glGetUniformLocation(volcano_shader->Program, "light.specular"),  1.0f, 1.0f, 1.0f);
+        glUniform3f(glGetUniformLocation(volcano_shader->Program, "light.specular"),  1.0f, 1.0f, 1.0f);
 
 
         glUniform1f(glGetUniformLocation(volcano_shader->Program, "light.constant"),  1.0f);
@@ -368,16 +339,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     //rotation movement
     if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
-        angleY -= SPEED_ROTATE;
-    }
-    if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
-        angleY += SPEED_ROTATE;
-    }
-    if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
         angleX += SPEED_ROTATE;
     }
-    if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+    if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
         angleX -= SPEED_ROTATE;
+    }
+    if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        angleY += SPEED_ROTATE;
+    }
+    if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+        angleY -= SPEED_ROTATE;
     }
     //traslation movement
     if(glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS){
