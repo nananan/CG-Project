@@ -28,7 +28,7 @@ const GLfloat PITCH      = -43.0668f;
 //---- in the surface, front of lava
 // const GLfloat YAW        = 336.196f;
 // const GLfloat PITCH      = -6.76645f;
-const GLfloat SPEED      =  1000.0f;
+const GLfloat SPEED      =  1500.0f;
 const GLfloat SENSITIVTY =  0.25f;
 const GLfloat ZOOM       =  45.0f;
 

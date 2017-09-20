@@ -29,7 +29,7 @@ bool pressStart = false;
 float rotX = 0.0f;
 float rotY = 0.0f;
 
-#define MOV_LIGHT 0.01f;
+#define MOV_LIGHT 0.03f;
 #define NUM_PARTICLES 2000;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -246,7 +246,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             lightPos.y += MOV_LIGHT;
             target.y += MOV_LIGHT;
 
-            rotX -= 0.4f;
+            rotX -= 0.6f;
         }
     }
     if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
@@ -254,7 +254,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             lightPos.y -= MOV_LIGHT;
             target.y -= MOV_LIGHT;
 
-            rotX += 0.4f;
+            rotX += 0.6f;
         }
 
     }
@@ -263,7 +263,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             lightPos.x += MOV_LIGHT;
             target.x += MOV_LIGHT;
 
-            rotY += 0.4f;
+            rotY += 0.6f;
         }
     }
     if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
@@ -271,7 +271,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             lightPos.x -= MOV_LIGHT;
             target.x -= MOV_LIGHT;
 
-            rotY -= 0.4f;
+            rotY -= 0.6f;
         }
     }
     if(glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS){

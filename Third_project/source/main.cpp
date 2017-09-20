@@ -106,11 +106,11 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
 
-    Reader* reader_altitude = new Reader("/home/eliana/MEGA/Qt/Third_project/dataset_lava/altitudes.dat");
+    Reader* reader_altitude = new Reader("../dataset_lava/altitudes.dat");
     reader_altitude->loadData(false);
-    Reader* reader_temperature = new Reader("/home/eliana/MEGA/Qt/Third_project/dataset_lava/temperature.dat");
+    Reader* reader_temperature = new Reader("../dataset_lava/temperature.dat");
     reader_temperature->loadData(true);
-    Reader* reader_lava = new Reader("/home/eliana/MEGA/Qt/Third_project/dataset_lava/lava.dat");
+    Reader* reader_lava = new Reader("../dataset_lava/lava.dat");
     reader_lava->loadData(true);
 
     float max = reader_temperature->getMatrix()[0][0];
@@ -121,13 +121,13 @@ int main()
     int ncols = reader_altitude->getValues()["ncols"];
     Altitude* altitudes = new Altitude(nrows, ncols);
 
-    for (int i = 0; i < nrows+1; i++) {
-        for (int j = 0; j < ncols+1; j++) {
-            altitudes->setValueMatrix(i,j, reader_lava->getValueMatrix(i,j));
-        }
-    }
-
-    delete reader_lava;
+//     for (int i = 0; i < nrows+1; i++) {
+//         for (int j = 0; j < ncols+1; j++) {
+//             altitudes->setValueMatrix(i,j, reader_lava->getValueMatrix(i,j));
+//         }
+//     }
+// 
+//     delete reader_lava;
 
     for (int i = 0; i < reader_temperature->getValues()["nrows"]; i++) {
         for (int j = 0; j < reader_temperature->getValues()["ncols"]; j++) {
@@ -140,16 +140,26 @@ int main()
         }
     }
 
-    MyTexture texture("/home/eliana/MEGA/Qt/Third_project/textures/texture.png");
+    MyTexture texture("../textures/texture.png");
     texture.setParameters(GL_REPEAT, GL_REPEAT,GL_NEAREST, GL_NEAREST);
 
-    Shader* volcano_shader = new Shader("/home/eliana/MEGA/Qt/Third_project/shaders/volcano.vs", "/home/eliana/MEGA/Qt/Third_project/shaders/volcano.frag");
-    Shader* light_shader = new Shader("/home/eliana/MEGA/Qt/Third_project/shaders/light.vs", "/home/eliana/MEGA/Qt/Third_project/shaders/light.frag");
+    Shader* volcano_shader = new Shader("../shaders/volcano.vs", "../shaders/volcano.frag");
+    Shader* light_shader = new Shader("../shaders/light.vs", "../shaders/light.frag");
 
     altitudes->fillVertexMatrix(reader_altitude->getMatrix(), nrows, ncols, reader_altitude->getValues()["NODATA_value"]);
     delete reader_altitude;
+    
+    
+    for (int i = 0; i < nrows+1; i++) {
+        for (int j = 0; j < ncols+1; j++) {
+            altitudes->setValueMatrix(i,j, reader_lava->getValueMatrix(i,j));
+        }
+    }
 
-    altitudes->calculateNormal();
+    delete reader_lava;
+
+    
+    altitudes->calculateNormal();    
 
     vector<tuple<float,float,float>> vert;
     vector<tuple<float,float>> vert_tex;
@@ -233,12 +243,12 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = glm::perspective(camera.Zoom, (float)WIDTH/(float)HEIGHT, 0.1f, 10000.0f);
 
-        cout<<"POS: "<<camera.Position.x<<" "<<camera.Position.y<<" "<<camera.Position.z<<endl;
-        cout<<camera.Yaw<<" "<<camera.Pitch<<endl;
+//         cout<<"POS: "<<camera.Position.x<<" "<<camera.Position.y<<" "<<camera.Position.z<<endl;
+//         cout<<camera.Yaw<<" "<<camera.Pitch<<endl;
+//        
+//         cout<<angleY<<" "<<angleX<<endl;
+//         cout<<transX<<" "<<transY<<" "<<transZ<<endl;
 //         
-        cout<<angleY<<" "<<angleX<<endl;
-        cout<<transX<<" "<<transY<<" "<<transZ<<endl;
-        
         volcano_shader->Use();
 
         glUniform1i(glGetUniformLocation(volcano_shader->Program, "material.diffuse"),  0);
@@ -258,12 +268,12 @@ int main()
 
         drawModel(volcano_shader, view, projection, (float)(nrows+1)/2, (float)(ncols+1)/2);
 
-        texture.bindTexture(volcano_shader);
+//         texture.bindTexture(volcano_shader);
         glBindVertexArray(VAO);
 
         glDrawElements(GL_TRIANGLES, sizeEBO, GL_UNSIGNED_INT, 0);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        texture.unbindTexture();
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//         texture.unbindTexture();
 
         glfwSwapBuffers(window);
     }
